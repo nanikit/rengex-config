@@ -8,6 +8,40 @@
 # 문자열 아닌 것 스킵
 [^"]+
 
+# Actors.json
+# {"id":1,"battlerName":"","characterIndex":0,"characterName":"$043_마하","classId":1,"equips":[1,11,2]
+|"characterName"\s*:\s*"(?>\\.|[^"\n])*"\s*,\s*"classId"\s*:
+
+# Tilesets.json에 들어있는 이미지 파일명 배열 스킵
+|"tilesetNames"\s*:\s*\[(
+  # 파일명 문자열
+  "(?>\\.|[^"\n])*"
+  # , 등 다른 내용
+  |[^"\]]+
+)*?\]
+
+# Map___.json에 들어있는 이미지 파일명 스킵
+# Map019.json: "note":"<fgName:! 마을 외관> <fgLoopY:0> <fgLoopX:0>\n\n\n",
+|"note"\s*:\s*"(?>\\.|[^"\n])*?<fgName:.*?>(?>\\.|[^"\n])*?"
+# Map022.json: image":{"tileId":0,"characterName":"$008_아저씨","direction":2,"pattern":1,"characterIndex":0},
+|"tileId"\s*:\s*\d+\s*,"characterName"\s*:\s*"(?>\\.|[^"\n])*"
+# Map034.json: {"code": 41,"parameters":["$043_마하",0],"indent":null}
+|(?<={)"code"\s*:\s*41\s*,\s*"parameters"\s*:\s*\[\s*"(?>\\.|[^"\n])*".*?\]\s*,\s*"indent"
+
+# Map___.json에 들어있는 사운드 파일명 스킵
+# 배경음: {"code":241,"indent":0,"parameters":[{"name":"04_学園街","volume":30,"pitch":100,"pan":0}]}
+# 효과음: {"code":250,"indent":0,"parameters":[{"name":"Move1","pan":0,"pitch":100,"volume":90}]}
+# name이 키로 나오면
+|"name"\s*:\s*
+# 사운드 파일명 문자열로 의심
+"(?>\\.|[^"\n])*"
+# pan이나 volume키가 나오는지 검사
+\s*,\s*"(pan|volume)"\s*:
+
+# Map061.json [{"code":356,"indent":0,"parameters":["<NES말풍선 대상:1>"]},..
+# 뭔가 스크립트 느낌 나는데 일단 경계대상
+
+
 # 일본어가 하나 이상 있는 값 문자열
 |"(?<val>(?>\\.|[^"\n])*?[\jp](?>\\.|[^"\n])*)"(?!\s*:)
 
