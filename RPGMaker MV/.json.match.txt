@@ -37,6 +37,8 @@
 |"tileId"\s*:\s*\d+\s*,"characterName"\s*:\s*"(?>\\.|[^"\n])*"
 # Map034.json: {"code": 41,"parameters":["$043_마하",0],"indent":null}
 |(?<={)"code"\s*:\s*41\s*,\s*"parameters"\s*:\s*\[\s*"(?>\\.|[^"\n])*".*?\]\s*,\s*"indent"
+# Map046.json: "parallaxLoopY":false,"parallaxName":"하늘 2","parallaxShow":
+|"parallaxLoopY"\s*:\s*(false|true)\s*,\s*"parallaxName"\s*:\s*"(?>\\.|[^"\n])*"\s*,\s*"parallaxShow"\s*:
 
 # Map___.json에 들어있는 사운드 파일명 스킵
 # 배경음: {"code":241,"indent":0,"parameters":[{"name":"04_学園街","volume":30,"pitch":100,"pan":0}]}
@@ -51,17 +53,9 @@
 # Map061.json [{"code":356,"indent":0,"parameters":["<NES말풍선 대상:1>"]},..
 # 뭔가 스크립트 느낌 나는데 일단 경계대상
 
-# 값 문자열 안의 붙어있는 일본어
+# 일본어가 들어있는 값 문자열
 |"
-# "와 \x 제외
-(?>[\x00-\x21\x23-\x5B\x5D-\x7F]|\\.)*
-# 붙어있는 일본어 전부 캡처
-(?>
-  # 일본어를 포함한 공백으로 연결된 비아스키
-  (?<val>[^\x00-\x1F\x21-\x7F]*?[\jp][^\x00-\x1F\x21-\x7F]*)
-  # "와 \x 제외
-  ([\x00-\x21\x23-\x5B\x5D-\x7F]|\\.)*
-)*?
+(?<val>(?>\\.|[^"])*?[\jp](?>\\.|[^"])*)
 # 뒤에 :가 나오면 키이므로 위험
 "(?!\s*:)
 
