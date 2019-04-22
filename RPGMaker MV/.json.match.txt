@@ -14,6 +14,38 @@
 # "faceIndex":0,"faceName":"サシャ顔１","traits":[]
 |"faceIndex"\s*:\s*\d+\s*,\s*"faceName"\s*:\s*"(?>\\.|[^"\n])*"\s*
 
+# Actors.json: {"id":1,"battlerName":"", ... "maxLevel":50,"name":"ソフィー","nickname":"探偵見習い","note":"<CSS_画像:sophie_status>\nImage Position 0\nbgi offset X: 0\nbgi offset Y: 0\n</CSS_画像>\n\n<CSS_画像:sophie2_status>\nImage Position 0\nbgi offset X: 0\nbgi offset Y: 0\n</CSS_画像>\n\n<CSS_画像:sophie3_status>\nImage Position 0\nbgi offset X: 0\nbgi offset Y: 0\n</CSS_画像>\n","profile":""},
+# Items.json: {"id":81,"animationId":0, ... ,"itypeId":3,"name":"みみず退治","note":"<SG説明:\\c[2]へびみみずの退治\\c[0]\n報酬：1000G\n依頼主：農地の人\n概要：へびみみず退治\n　　　畑にへびみみずが出て大変なんだ\n　　　退治してくれないか？\n>\n","occasion":3, ...
+# Map061.json: [{"code":356,"indent":0,"parameters":["<NES말풍선 대상:1>"]},..
+|"
+(
+  # 공백, 기타 문자
+  (?>\s|\\.)*
+  # 시작 태그
+  <(?>\\.|[^>"])*?
+
+  # 인자
+  (:(
+    # 일본어가 들어있으면 추출
+    (?<arg>(?>\\.|[^>"])*?[\jp](?>\\.|[^>"])*?)
+    # 없으면 무시
+    |(?>\\.|[^>"])*?
+  ))?>
+  (
+    # 내용
+    (
+      # 일본어가 들어있으면 추출
+      (?<arg2>(?>\\.|[^<"])*?[\jp](?>\\.|[^<"])*?)
+      # 없으면 무시
+      |(?>\\.|[^<"])*?
+    )
+    # 닫는 태그
+    </.*?>
+  )?
+)*?
+# 내용 끝 공백, 기타 문자
+(?>\s|\\.)*"
+
 # Tilesets.json에 들어있는 이미지 파일명 배열 스킵
 |"tilesetNames"\s*:\s*\[(
   # 파일명 문자열
@@ -49,9 +81,6 @@
 "(?>\\.|[^"\n])*"
 # pan이나 volume키가 나오는지 검사
 \s*,\s*"(pan|volume)"\s*:
-
-# Map061.json [{"code":356,"indent":0,"parameters":["<NES말풍선 대상:1>"]},..
-# 뭔가 스크립트 느낌 나는데 일단 경계대상
 
 # 일본어가 들어있는 값 문자열
 |"
